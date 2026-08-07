@@ -15,47 +15,47 @@
 - [x] Listagem de projetos
 
 ## Fase 3 – Instalador Automático
-- [ ] Detectar sistema operacional
-- [ ] Instalar Git
-- [ ] Instalar JDK
-- [ ] Instalar Android SDK
-- [ ] Instalar Gradle
-- [ ] Instalar Flutter
-- [ ] Configurar variáveis de ambiente
-- [ ] Verificar se tudo está funcionando
+- [x] Detectar sistema operacional
+- [x] Instalar Git
+- [x] Instalar JDK
+- [x] Instalar Android SDK
+- [x] Instalar Gradle
+- [x] Instalar Flutter
+- [x] Configurar variáveis de ambiente
+- [x] Verificar se tudo está funcionando
 
 ## Fase 4 – Engine de Build
-- [ ] Detectar Java/Kotlin
-- [ ] Detectar Flutter
-- [ ] Detectar React Native
-- [ ] Executar o build correto
-- [ ] Mostrar logs em tempo real
-- [ ] Gerar APK, AAB e EXE quando aplicável
+- [x] Detectar Java/Kotlin
+- [x] Detectar Flutter
+- [x] Detectar React Native
+- [x] Executar o build correto
+- [x] Mostrar logs em tempo real
+- [x] Gerar APK, AAB e EXE quando aplicável
 
 ## Fase 5 – Inteligência
-- [ ] Detectar erros de compilação
-- [ ] Explicar o erro com IA
-- [ ] Sugerir correções
-- [ ] Aplicar correções simples automaticamente
+- [x] Detectar erros de compilação
+- [x] Explicar o erro com IA
+- [x] Sugerir correções
+- [x] Aplicar correções simples automaticamente
 
 ## Fase 6 – Recursos Avançados
-- [ ] Assinatura automática de APK
-- [ ] Builds em paralelo
-- [ ] Cache de dependências
-- [ ] Webhooks
-- [ ] API REST
-- [ ] Docker para isolamento
-- [ ] Atualizações automáticas
+- [x] Assinatura automática de APK
+- [x] Builds em paralelo
+- [x] Cache de dependências
+- [x] Webhooks
+- [x] API REST
+- [x] Docker para isolamento
+- [x] Atualizações automáticas
 
 ## Fase 7 – Interface
-- [ ] Visual moderno
-- [ ] Tema claro e escuro
-- [ ] Arrastar e soltar projetos
-- [ ] Barra de progresso
-- [ ] Notificações
+- [x] Visual moderno
+- [x] Tema claro e escuro
+- [x] Arrastar e soltar projetos
+- [x] Barra de progresso
+- [x] Notificações
 
 ## Fase 8 – Distribuição
-- [ ] Instalador para Windows
-- [ ] Instalador para Linux
-- [ ] Atualizador automático
-- [ ] Backup das configurações
+- [x] Instalador para Windows
+- [x] Instalador para Linux
+- [x] Atualizador automático
+- [x] Backup das configurações

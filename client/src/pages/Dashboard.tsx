@@ -1,8 +1,9 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useProjects } from "@/_core/hooks/useProjects";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Settings, LogOut, Moon, Sun } from "lucide-react";
+import { Plus, Settings, LogOut, Moon, Sun, Loader2 } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLocation } from "wouter";
 
@@ -10,6 +11,7 @@ export default function Dashboard() {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [, setLocation] = useLocation();
+  const { projects, isLoading } = useProjects();
 
   const handleLogout = async () => {
     await logout();
@@ -84,8 +86,12 @@ export default function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-slate-900 dark:text-white">0</div>
-              <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">Aguardando primeiro projeto</p>
+              <div className="text-3xl font-bold text-slate-900 dark:text-white">
+                {isLoading ? <Loader2 className="w-8 h-8 animate-spin" /> : projects.length}
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
+                {projects.length === 0 ? "Aguardando primeiro projeto" : `${projects.length} projeto${projects.length !== 1 ? "s" : ""}`}
+              </p>
             </CardContent>
           </Card>
 
@@ -96,8 +102,8 @@ export default function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-slate-900 dark:text-white">0</div>
-              <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">Nenhum build ainda</p>
+              <div className="text-3xl font-bold text-slate-900 dark:text-white">--</div>
+              <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">Sem dados</p>
             </CardContent>
           </Card>
 
@@ -141,23 +147,50 @@ export default function Dashboard() {
 
           <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
             <CardContent className="pt-6">
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Plus className="w-8 h-8 text-slate-400 dark:text-slate-500" />
+              {isLoading ? (
+                <div className="text-center py-12">
+                  <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-slate-600 dark:text-slate-400" />
+                  <p className="text-slate-600 dark:text-slate-400">Carregando projetos...</p>
                 </div>
-                <p className="text-slate-600 dark:text-slate-400 mb-4">
-                  Nenhum projeto criado ainda
-                </p>
-                <p className="text-sm text-slate-500 dark:text-slate-500 mb-6">
-                  Comece adicionando um projeto do GitHub, fazendo upload de um ZIP ou clonando um repositório
-                </p>
-                <Button 
-                  onClick={() => setLocation("/projects/new")}
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
-                >
-                  Criar Primeiro Projeto
-                </Button>
-              </div>
+              ) : projects.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Plus className="w-8 h-8 text-slate-400 dark:text-slate-500" />
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-400 mb-4">
+                    Nenhum projeto criado ainda
+                  </p>
+                  <p className="text-sm text-slate-500 dark:text-slate-500 mb-6">
+                    Comece adicionando um projeto do GitHub, fazendo upload de um ZIP ou clonando um repositório
+                  </p>
+                  <Button 
+                    onClick={() => setLocation("/projects/new")}
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
+                  >
+                    Criar Primeiro Projeto
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {projects.map((project) => (
+                    <div
+                      key={project.id}
+                      onClick={() => setLocation(`/projects/${project.id}`)}
+                      className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-medium text-slate-900 dark:text-white">{project.name}</h3>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">{project.projectType}</p>
+                        </div>
+                        <Badge className={project.status === "active" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : ""}>
+                          {project.status}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
