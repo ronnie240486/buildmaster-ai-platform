@@ -7,6 +7,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import NewProject from "./pages/NewProject";
+import ProjectDetail from "./pages/ProjectDetail";
 
 function Router() {
   const { isAuthenticated, loading } = useAuth();
@@ -26,6 +28,8 @@ function Router() {
     <Switch>
       {isAuthenticated ? (
         <>
+          <Route path="/projects/new" component={NewProject} />
+          <Route path="/projects/:id" component={ProjectDetail} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/" component={Dashboard} />
         </>

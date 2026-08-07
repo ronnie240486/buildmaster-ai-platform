@@ -130,7 +130,10 @@ export default function Dashboard() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">Meus Projetos</h3>
-            <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white gap-2">
+            <Button 
+              onClick={() => setLocation("/projects/new")}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white gap-2"
+            >
               <Plus className="w-4 h-4" />
               Novo Projeto
             </Button>
@@ -148,7 +151,10 @@ export default function Dashboard() {
                 <p className="text-sm text-slate-500 dark:text-slate-500 mb-6">
                   Comece adicionando um projeto do GitHub, fazendo upload de um ZIP ou clonando um repositório
                 </p>
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white">
+                <Button 
+                  onClick={() => setLocation("/projects/new")}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
+                >
                   Criar Primeiro Projeto
                 </Button>
               </div>

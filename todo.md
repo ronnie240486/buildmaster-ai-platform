@@ -8,11 +8,11 @@
 - [x] Navbar com tema claro/escuro
 
 ## Fase 2 – Gerenciador de Projetos
-- [ ] Adicionar projeto por GitHub
-- [ ] Upload de ZIP
-- [ ] Clonar repositórios
-- [ ] Histórico de projetos
-- [ ] Listagem de projetos
+- [x] Adicionar projeto por GitHub
+- [x] Upload de ZIP
+- [x] Clonar repositórios
+- [x] Histórico de projetos
+- [x] Listagem de projetos
 
 ## Fase 3 – Instalador Automático
 - [ ] Detectar sistema operacional
