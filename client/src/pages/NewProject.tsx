@@ -4,21 +4,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Github, Upload, Copy } from "lucide-react";
+import { ArrowLeft, Github, Upload, Copy, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useProjects } from "@/_core/hooks/useProjects";
+import { toast } from "sonner";
 
 type ProjectSourceType = "github" | "zip" | "clone";
 
 export default function NewProject() {
   const [, setLocation] = useLocation();
+  const { create } = useProjects();
   const [sourceType, setSourceType] = useState<ProjectSourceType>("github");
-  const [projectType, setProjectType] = useState("android");
+  const [projectType, setProjectType] = useState<"android" | "flutter" | "react-native" | "other">("android");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     gitUrl: "",
-    gitToken: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -31,19 +34,28 @@ export default function NewProject() {
 
   const handleCreateProject = async () => {
     if (!formData.name.trim()) {
-      alert("Por favor, insira um nome para o projeto");
+      toast.error("Por favor, insira um nome para o projeto");
       return;
     }
 
-    // TODO: Implementar chamada à API para criar projeto
-    console.log("Criando projeto:", {
-      ...formData,
-      sourceType,
-      projectType,
-    });
+    try {
+      setIsSubmitting(true);
+      await create({
+        name: formData.name,
+        description: formData.description,
+        gitUrl: formData.gitUrl || undefined,
+        projectType,
+        sourceType,
+      });
 
-    alert("Projeto criado com sucesso! (em desenvolvimento)");
-    setLocation("/dashboard");
+      toast.success("Projeto criado com sucesso!");
+      setLocation("/dashboard");
+    } catch (error) {
+      console.error("Erro ao criar projeto:", error);
+      toast.error("Erro ao criar projeto. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -143,7 +155,6 @@ export default function NewProject() {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* Project Name */}
                 <div>
                   <Label htmlFor="name" className="text-slate-700 dark:text-slate-300">
                     Nome do Projeto *
@@ -158,7 +169,6 @@ export default function NewProject() {
                   />
                 </div>
 
-                {/* Project Description */}
                 <div>
                   <Label htmlFor="description" className="text-slate-700 dark:text-slate-300">
                     Descrição
@@ -174,12 +184,11 @@ export default function NewProject() {
                   />
                 </div>
 
-                {/* Project Type */}
                 <div>
                   <Label htmlFor="projectType" className="text-slate-700 dark:text-slate-300">
                     Tipo de Projeto *
                   </Label>
-                  <Select value={projectType} onValueChange={setProjectType}>
+                  <Select value={projectType} onValueChange={(v: any) => setProjectType(v)}>
                     <SelectTrigger className="mt-2 bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600">
                       <SelectValue />
                     </SelectTrigger>
@@ -192,7 +201,6 @@ export default function NewProject() {
                   </Select>
                 </div>
 
-                {/* Git URL (for GitHub or Clone) */}
                 {(sourceType === "github" || sourceType === "clone") && (
                   <div>
                     <Label htmlFor="gitUrl" className="text-slate-700 dark:text-slate-300">
@@ -209,28 +217,6 @@ export default function NewProject() {
                   </div>
                 )}
 
-                {/* GitHub Token */}
-                {sourceType === "github" && (
-                  <div>
-                    <Label htmlFor="gitToken" className="text-slate-700 dark:text-slate-300">
-                      Token do GitHub (opcional)
-                    </Label>
-                    <Input
-                      id="gitToken"
-                      name="gitToken"
-                      type="password"
-                      placeholder="ghp_..."
-                      value={formData.gitToken}
-                      onChange={handleInputChange}
-                      className="mt-2 bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600"
-                    />
-                    <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
-                      Use um token para repositórios privados
-                    </p>
-                  </div>
-                )}
-
-                {/* ZIP Upload */}
                 {sourceType === "zip" && (
                   <div>
                     <Label className="text-slate-700 dark:text-slate-300">
@@ -239,13 +225,12 @@ export default function NewProject() {
                     <div className="mt-2 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 text-center cursor-pointer hover:border-slate-400 dark:hover:border-slate-500 transition-colors">
                       <Upload className="w-8 h-8 text-slate-400 dark:text-slate-500 mx-auto mb-2" />
                       <p className="text-sm text-slate-600 dark:text-slate-400">
-                        Clique ou arraste um arquivo ZIP aqui
+                        Envio de ZIP suportado via importação de arquivo
                       </p>
                     </div>
                   </div>
                 )}
 
-                {/* Action Buttons */}
                 <div className="flex gap-4 pt-4">
                   <Button
                     variant="outline"
@@ -256,8 +241,10 @@ export default function NewProject() {
                   </Button>
                   <Button
                     onClick={handleCreateProject}
+                    disabled={isSubmitting}
                     className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
                   >
+                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                     Criar Projeto
                   </Button>
                 </div>

@@ -11,12 +11,6 @@ export function useProjects() {
     },
   });
 
-  const updateMutation = trpc.projects.update.useMutation({
-    onSuccess: () => {
-      utils.projects.list.invalidate();
-    },
-  });
-
   const deleteMutation = trpc.projects.delete.useMutation({
     onSuccess: () => {
       utils.projects.list.invalidate();
@@ -28,7 +22,6 @@ export function useProjects() {
     isLoading: listQuery.isLoading,
     error: listQuery.error,
     create: createMutation.mutateAsync,
-    update: updateMutation.mutateAsync,
     delete: deleteMutation.mutateAsync,
   };
 }
